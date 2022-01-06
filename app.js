@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('#start-button')
   const width = 10
   let nextRandom = 0
+  let timerId
 
   //The tetris shapes
   const lTetrisShape = [
@@ -42,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
     [width, width + 1, width + 2, width + 3],
   ]
 
-  const theTetrisShapes = [lTetrisShape, zTetrisShape, tTetrisShape, oTetrisShape, iTetrisShape]
+  const tetrisShapes = [lTetrisShape, zTetrisShape, tTetrisShape, oTetrisShape, iTetrisShape]
 
   let currentPosition = 4
   let currentRotation = 0
 
   //randomly select tetris shape
-  let random = Math.floor(Math.random() * theTetrisShapes.length)
-  let current = theTetrisShapes[random][currentRotation]
+  let random = Math.floor(Math.random() * tetrisShapes.length)
+  let current = tetrisShapes[random][currentRotation]
 
   //draw the first tetris shape
   function draw() {
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //make the shape move down every second
-  timerId = setInterval(moveDown, 1000)
+  // timerId = setInterval(moveDown, 1000)
 
   //assing function to keyCodes
   function control(e) {
@@ -96,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
       current.forEach((index) => squares[currentPosition + index].classList.add('taken'))
       //make a new shape move down
       random = nextRandom
-      nextRandom = Math.floor(Math.random() * theTetrisShapes.length)
-      current = theTetrisShapes[random][currentRotation]
+      nextRandom = Math.floor(Math.random() * tetrisShapes.length)
+      current = tetrisShapes[random][currentRotation]
       currentPosition = 4
       draw()
       displayShape()
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentRotation = 0
     }
 
-    current = theTetrisShapes[random][currentRotation]
+    current = tetrisShapes[random][currentRotation]
 
     draw()
   }
@@ -171,4 +172,17 @@ document.addEventListener('DOMContentLoaded', () => {
       displaySquares[displayIndex + index].classList.add('tetris-shape')
     })
   }
+
+  //add functionality to our button
+  startBtn.addEventListener('click', () => {
+    if (timerId) {
+      clearInterval(timerId)
+      timerId = null
+    } else {
+      draw()
+      timerId = setInterval(moveDown, 1000)
+      nextRandom = Math.floor(Math.random() * tetrisShapes.length)
+      displayShape()
+    }
+  })
 })
