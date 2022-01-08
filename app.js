@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const width = 10
   let nextRandom = 0
   let timerId
+  let score = 0
+
+  const colors = ['orange', 'red', 'purple', 'green', 'blue']
 
   //The tetris shapes
   const lTetrisShape = [
@@ -56,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function draw() {
     current.forEach((index) => {
       squares[currentPosition + index].classList.add('tetris-shape')
+      squares[currentPosition + index].style.backgroundColor = colors[random]
     })
   }
 
@@ -63,11 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function undraw() {
     current.forEach((index) => {
       squares[currentPosition + index].classList.remove('tetris-shape')
+      squares[currentPosition + index].style.backgroundColor = ''
     })
   }
-
-  //make the shape move down every second
-  // timerId = setInterval(moveDown, 1000)
 
   //assing function to keyCodes
   function control(e) {
@@ -102,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPosition = 4
       draw()
       displayShape()
+      addScore()
+      gameOver()
     }
   }
 
@@ -166,10 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function displayShape() {
     displaySquares.forEach((squares) => {
       squares.classList.remove('tetris-shape')
+      squares.style.backgroundColor = ''
     })
 
     upNextShape[nextRandom].forEach((index) => {
       displaySquares[displayIndex + index].classList.add('tetris-shape')
+      displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom]
     })
   }
 
@@ -185,4 +191,33 @@ document.addEventListener('DOMContentLoaded', () => {
       displayShape()
     }
   })
+
+  //add score feature
+  function addScore() {
+    for (let i = 0; i < 199; i += width) {
+      const row = [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6, i + 7, i + 8, i + 9]
+
+      if (row.every((index) => squares[index].classList.contains('taken'))) {
+        score += 10
+        scoreDisplay.innerHTML = score
+        row.forEach((index) => {
+          squares[index].classList.remove('taken')
+          squares[index].classList.remove('tetris-shape')
+          squares[index].styles.backgroundColor = ''
+        })
+
+        const squaresRemoved = squares.splice(i, width)
+        squares = squaresRemoved.concat(squares)
+        squares.forEach((cell) => grid.appendChild(cell))
+      }
+    }
+  }
+
+  //Game Over
+  function gameOver() {
+    if (current.some((index) => squares[currentPosition + index].classList.contains('taken'))) {
+      scoreDisplay.innerHTML = 'Game Over'
+      clearInterval(timerId)
+    }
+  }
 })
