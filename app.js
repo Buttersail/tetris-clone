@@ -113,13 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function moveLeft() {
     undraw()
     const isAtLeftEdge = current.some((index) => (currentPosition + index) % width === 0)
-
     if (!isAtLeftEdge) currentPosition -= 1
-
     if (current.some((index) => squares[currentPosition + index].classList.contains('taken'))) {
       currentPosition += 1
     }
-
     draw()
   }
 
@@ -127,13 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function moveRight() {
     undraw()
     const isAtRightEdge = current.some((index) => (currentPosition + index) % width === width - 1)
-
     if (!isAtRightEdge) currentPosition += 1
-
     if (current.some((index) => squares[currentPosition + index].classList.contains('taken'))) {
       currentPosition -= 1
     }
-
     draw()
   }
 
@@ -141,21 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function rotate() {
     undraw()
     currentRotation++
-
     //goes back to the default rotation if it reaches rotation of 4
     if (currentRotation === current.length) {
       currentRotation = 0
     }
-
     current = tetrisShapes[random][currentRotation]
-
     draw()
   }
 
   //show which shape is coming up next in the mini-grid
   const displaySquares = document.querySelectorAll('.mini-grid div')
   const displayWidth = 4
-  let displayIndex = 0
+  const displayIndex = 0
 
   //the shapes without the rotations
   const upNextShape = [
@@ -172,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
       squares.classList.remove('tetris-shape')
       squares.style.backgroundColor = ''
     })
-
     upNextShape[nextRandom].forEach((index) => {
       displaySquares[displayIndex + index].classList.add('tetris-shape')
       displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom]
@@ -203,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.forEach((index) => {
           squares[index].classList.remove('taken')
           squares[index].classList.remove('tetris-shape')
-          squares[index].styles.backgroundColor = ''
+          // squares[index].styles.backgroundColor = ''
         })
 
         const squaresRemoved = squares.splice(i, width)
