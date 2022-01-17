@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       moveDown()
     }
   }
-  document.addEventListener('keyup', control)
+  document.addEventListener('keydown', control)
 
   //move down function
   function moveDown() {
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  //move the shape unless its at an edge
+  //move the shape left, unless it an edge or something is blocking it
   function moveLeft() {
     undraw()
     const isAtLeftEdge = current.some((index) => (currentPosition + index) % width === 0)
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.forEach((index) => {
           squares[index].classList.remove('taken')
           squares[index].classList.remove('tetris-shape')
-          // squares[index].styles.backgroundColor = ''
+          squares[index].style.backgroundColor = ''
         })
 
         const squaresRemoved = squares.splice(i, width)
