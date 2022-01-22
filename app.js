@@ -131,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     draw()
   }
 
+  //make check for if the tetris-piece is at the edge
+  //tried making this but couldn't really see how I was supposed to tackle the situation, tomorrow is another day!
+
   //rotate the shape
   function rotate() {
     undraw()
