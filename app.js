@@ -132,7 +132,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //make check for if the tetris-piece is at the edge
-  //tried making this but couldn't really see how I was supposed to tackle the situation, tomorrow is another day!
+  function checkRotatedTakenPosition() {
+    if (current.some((index) => squares[currentPosition + index].classList.contains('taken'))) {
+      currentRotation++
+      if (currentRotation === current.length) {
+        currentRotation = 0
+      }
+      current = theTetraminoes[random][currentRotation]
+      checkRotatedPositionAtEdge()
+      checkRotatedTakenPosition()
+    }
+  }
+
+  function isAtRight() {
+    return current.some((index) => (currentPosition + index + 1) % width === 0)
+  }
+
+  function isAtLeft() {
+    return current.some((index) => (currentPosition + index) % width === 0)
+  }
+
+  function checkRotatedPositionAtEdge(edge) {
+    edge = edge || currentPosition
+    if ((edge + 1) % width < 4) {
+      if (isAtRight()) {
+        currentPosition += 1
+        checkRotatedPositionAtEdge(edge)
+      }
+    } else if (edge % width > 5) {
+      if (isAtLeft()) {
+        currentPosition -= 1
+        checkRotatedPositionAtEdge(edge)
+      }
+    }
+  }
 
   //rotate the shape
   function rotate() {
@@ -143,6 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentRotation = 0
     }
     current = tetrisShapes[random][currentRotation]
+    checkRotatedTakenPosition()
+    checkRotatedPositionAtEdge()
     draw()
   }
 
